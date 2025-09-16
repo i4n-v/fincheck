@@ -1,0 +1,8 @@
+{
+  "name": "fincheck",
+  "version": "1.0.0",
+  "description": "A web app to manage you bank accounts.",
+  "repository": "https://github.com/i4n-v/fincheck",
+  "author": "Ian Vinícius <ianvinicioss@gmail.com>",
+  "license": "MIT"
+}
