@@ -7,15 +7,15 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
+model UserModel {
   id       String @id @default(uuid()) @db.Uuid
   name     String
   email    String @unique
   password String
 
-  banckAccounts BankAccount[]
-  categories    Category[]
-  transactions  Transaction[]
+  banckAccounts BankAccountModel[]
+  categories    CategoryModel[]
+  transactions  TransactionModel[]
 
   @@map("users")
 }
@@ -28,7 +28,7 @@ enum BankAccountType {
   @@map("bank_account_type")
 }
 
-model BankAccount {
+model BankAccountModel {
   id             String          @id @default(uuid()) @db.Uuid
   userId         String          @map("user_id") @db.Uuid
   name           String
@@ -36,8 +36,8 @@ model BankAccount {
   type           BankAccountType
   color          String
 
-  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  transactions Transaction[]
+  user         UserModel          @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  transactions TransactionModel[]
 
   @@map("bank_accounts")
 }
@@ -49,20 +49,20 @@ enum TransactionType {
   @@map("transaction_type")
 }
 
-model Category {
+model CategoryModel {
   id     String          @id @default(uuid()) @db.Uuid
   userId String          @map("user_id") @db.Uuid
   name   String
   icon   String
   type   TransactionType
 
-  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  transactions Transaction[]
+  user         UserModel          @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  transactions TransactionModel[]
 
   @@map("categories")
 }
 
-model Transaction {
+model TransactionModel {
   id            String          @id @default(uuid()) @db.Uuid
   userId        String          @map("user_id") @db.Uuid
   bankAccountId String          @map("bank_account_id") @db.Uuid
@@ -72,9 +72,9 @@ model Transaction {
   date          DateTime
   type          TransactionType
 
-  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  bankAccount BankAccount @relation(fields: [bankAccountId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  category    Category?   @relation(fields: [categoryId], references: [id], onDelete: SetNull, onUpdate: Cascade)
+  user        UserModel        @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  bankAccount BankAccountModel @relation(fields: [bankAccountId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  category    CategoryModel?   @relation(fields: [categoryId], references: [id], onDelete: SetNull, onUpdate: Cascade)
 
   @@map("transactions")
 }
