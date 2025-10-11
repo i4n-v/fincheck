@@ -5,7 +5,7 @@ import {
 } from '../../domain/repositories/category.repository';
 import { PrismaService } from 'src/configs/database/prisma/prisma.service';
 import { CategoryEntity } from '../../domain/entities/category.entity';
-import { CategoryPrismaMapper } from '../mappers/category-prisma.mapper';
+import { CategoryPrismaMapper } from '../mappers/category.prisma.mapper';
 
 @Injectable()
 export class CategoryPrismaRepository implements CategoryRepository {
