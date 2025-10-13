@@ -1,10 +1,6 @@
 import { DomainException } from 'src/commons/exceptions/domain.exception';
 import { v4 } from 'uuid';
-
-export enum ITransactionType {
-  INCOME = 'INCOME',
-  EXPENSE = 'EXPENSE',
-}
+import { ITransactionType } from '../enums/transaction-type.enum';
 
 export class CategoryEntity {
   id: string;

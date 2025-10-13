@@ -1,8 +1,6 @@
 import { CategoryModel } from '@prisma/client';
-import {
-  CategoryEntity,
-  ITransactionType,
-} from '../../domain/entities/category.entity';
+import { CategoryEntity } from '../../domain/entities/category.entity';
+import { ITransactionType } from '../../domain/enums/transaction-type.enum';
 
 export class CategoryPrismaMapper {
   static toCategoryEntity(model: CategoryModel): CategoryEntity {

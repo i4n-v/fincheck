@@ -7,6 +7,7 @@ import configuration from 'src/configs/configuration';
 import { UserModule } from '../user/user.module';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { CategoryModule } from '../category/category.module';
+import { AuthModule } from '../Auth/auth.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { CategoryModule } from '../category/category.module';
     DatabaseModule,
     UserModule,
     CategoryModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [GetAppHelloUseCase],

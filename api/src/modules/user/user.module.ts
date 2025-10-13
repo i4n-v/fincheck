@@ -13,5 +13,11 @@ import { CreateUserUseCase } from './application/use-cases/create-user.use-case'
     },
     CreateUserUseCase,
   ],
+  exports: [
+    {
+      provide: UserRepository,
+      useClass: UserPrismaRepository,
+    },
+  ],
 })
 export class UserModule {}

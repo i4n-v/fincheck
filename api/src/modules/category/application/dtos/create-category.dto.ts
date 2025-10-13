@@ -1,5 +1,5 @@
 import { IsEnum, IsNotEmpty, IsString } from 'class-validator';
-import { ITransactionType } from '../../domain/entities/category.entity';
+import { ITransactionType } from '../../domain/enums/transaction-type.enum';
 
 export class CreateCategoryDto {
   @IsString()

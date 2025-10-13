@@ -1,8 +1,7 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { CategoryEntity } from '../../domain/entities/category.entity';
 import { CategoryRepository } from '../../domain/repositories/category.repository';
 import { CreateCategoryDto } from '../dtos/create-category.dto';
-import { DomainException } from 'src/commons/exceptions/domain.exception';
 
 @Injectable()
 export class CreateCategoryUseCase {
@@ -22,11 +21,7 @@ export class CreateCategoryUseCase {
     });
 
     if (categoryExists) {
-      throw new DomainException(
-        CreateCategoryUseCase.name,
-        'Category already exists',
-        'ERR_CATEGORY_ALREADY_EXISTS',
-      );
+      throw new BadRequestException('Category already exists');
     }
 
     return this.categoryRepository.create(categoryEntity);
