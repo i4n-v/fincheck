@@ -1,16 +1,16 @@
-import { Body, Controller, Post } from '@nestjs/common';
-import { CreateUserUseCase } from '../../application/use-cases/create-user.use-case';
-import { CreateUserDto } from '../../application/dtos/create-user.dto';
+import { Controller, Get, Request } from '@nestjs/common';
 import { DomainException } from 'src/commons/exceptions/domain.exception';
+import { GetUserByIdUseCase } from '../../application/use-cases/get-user-by-id.use-case';
+import { ActiveUserId } from 'src/commons/decorators/active-user-id.decorator';
 
 @Controller('users')
 export class UserController {
-  constructor(private readonly createUserUseCase: CreateUserUseCase) {}
+  constructor(private readonly getUserByIdUseCase: GetUserByIdUseCase) {}
 
-  @Post()
-  async create(@Body() createUserDto: CreateUserDto) {
+  @Get('me')
+  async me(@ActiveUserId() userId: string) {
     try {
-      return await this.createUserUseCase.execute(createUserDto);
+      return await this.getUserByIdUseCase.execute(userId);
     } catch (error) {
       if (error instanceof DomainException) {
         throw error.toHttpException();

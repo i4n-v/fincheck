@@ -52,4 +52,12 @@ export class CategoryPrismaRepository implements CategoryRepository {
 
     return CategoryPrismaMapper.toCategoryEntity(categoryModel);
   }
+
+  async findAllByUserId(userId: string) {
+    const categoryModels = await this.prismService.categoryModel.findMany({
+      where: { userId },
+    });
+
+    return categoryModels.map(CategoryPrismaMapper.toCategoryEntity);
+  }
 }

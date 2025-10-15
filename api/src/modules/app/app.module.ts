@@ -7,7 +7,10 @@ import configuration from 'src/configs/configuration';
 import { UserModule } from '../user/user.module';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { CategoryModule } from '../category/category.module';
-import { AuthModule } from '../Auth/auth.module';
+import { AuthModule } from '../auth/auth.module';
+import { APP_GUARD } from '@nestjs/core';
+import { AuthGuard } from 'src/commons/guards/auth.guard';
+import { BankAccountModule } from '../bank-account/bank-account.module';
 
 @Module({
   imports: [
@@ -21,8 +24,15 @@ import { AuthModule } from '../Auth/auth.module';
     UserModule,
     CategoryModule,
     AuthModule,
+    BankAccountModule,
   ],
   controllers: [AppController],
-  providers: [GetAppHelloUseCase],
+  providers: [
+    {
+      provide: APP_GUARD,
+      useClass: AuthGuard,
+    },
+    GetAppHelloUseCase,
+  ],
 })
 export class AppModule {}

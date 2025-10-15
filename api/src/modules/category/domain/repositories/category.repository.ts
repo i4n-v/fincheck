@@ -13,4 +13,5 @@ export abstract class CategoryRepository {
   abstract findByNameAndUserId(
     params: IFindByNameAndUserIdParams,
   ): Promise<CategoryEntity | null>;
+  abstract findAllByUserId(userId: string): Promise<CategoryEntity[]>;
 }

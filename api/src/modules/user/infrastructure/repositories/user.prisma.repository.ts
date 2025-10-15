@@ -27,4 +27,14 @@ export class UserPrismaRepository implements UserRepository {
 
     return userEntity;
   }
+
+  async findById(userId: string) {
+    const userModel = await this.prismService.userModel.findUnique({
+      where: { id: userId },
+    });
+
+    if (!userModel) return null;
+
+    return UserPrismaMapper.toUserEntity(userModel);
+  }
 }

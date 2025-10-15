@@ -6,4 +6,6 @@ export abstract class UserRepository {
   abstract create(user: UserEntity): Promise<UserEntity>;
 
   abstract findByEmail(email: string): Promise<UserEntity | null>;
+
+  abstract findById(userId: string): Promise<UserEntity | null>;
 }
