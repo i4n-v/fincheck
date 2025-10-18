@@ -1,17 +1,20 @@
 import { DomainException } from 'src/commons/exceptions/domain.exception';
 import { v4 } from 'uuid';
+import { IBankAccountType } from '../enums/bank-account-type.enum';
 
 export class BankAccountEntity {
   id: string;
   name: string;
-  type: string;
+  type: IBankAccountType;
   color: string;
+  initialBalance: number;
   userId: string;
 
   constructor(
     name: string,
-    type: string,
+    type: IBankAccountType,
     color: string,
+    initialBalance: number,
     userId: string,
     id?: string,
   ) {
@@ -41,6 +44,14 @@ export class BankAccountEntity {
       );
     }
 
+    if (initialBalance === undefined || initialBalance === null) {
+      throw new DomainException(
+        BankAccountEntity.name,
+        'Initial balance cannot be empty',
+        'ERR_INITIAL_BALANCE_CANNOT_BE_EMPTY',
+      );
+    }
+
     if (!userId) {
       throw new DomainException(
         BankAccountEntity.name,
@@ -52,6 +63,7 @@ export class BankAccountEntity {
     this.name = name;
     this.type = type;
     this.color = color;
+    this.initialBalance = initialBalance;
     this.userId = userId;
   }
 }
