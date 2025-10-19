@@ -1,4 +1,5 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
+import { DomainException } from 'src/commons/exceptions/domain.exception';
 import { UserEntity } from '../../../user/domain/entities/user.entity';
 import { UserRepository } from '../../../user/domain/repositories/user.repository';
 import { SignupDto } from '../dtos/signup.dto';
@@ -29,7 +30,12 @@ export class SignupUseCase {
     );
 
     if (emailIsAlreadyInUse) {
-      throw new ConflictException('Email is already in use');
+      throw new DomainException(
+        SignupUseCase.name,
+        'Email is already in use',
+        'ERR_EMAIL_ALREADY_IN_USE',
+        409,
+      );
     }
 
     const user = await this.userRepository.create(userEntity);

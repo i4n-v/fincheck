@@ -60,4 +60,14 @@ export class CategoryPrismaRepository implements CategoryRepository {
 
     return categoryModels.map(CategoryPrismaMapper.toCategoryEntity);
   }
+
+  async findByIdAndUserId(categoryId: string, userId: string) {
+    const categoryModel = await this.prismService.categoryModel.findFirst({
+      where: { id: categoryId, userId },
+    });
+
+    if (!categoryModel) return null;
+
+    return CategoryPrismaMapper.toCategoryEntity(categoryModel);
+  }
 }

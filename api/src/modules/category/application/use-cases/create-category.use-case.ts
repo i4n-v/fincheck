@@ -3,7 +3,7 @@ import { CategoryRepository } from '../../domain/repositories/category.repositor
 import { UserCreatedEvent } from 'src/commons/events/user-created.event';
 import { OnEvent } from '@nestjs/event-emitter';
 import { CategoryEntity } from '../../domain/entities/category.entity';
-import { ITransactionType } from '../../domain/enums/transaction-type.enum';
+import { ITransactionType } from '../../../transaction/domain/enums/transaction-type.enum';
 import { defaultCategories } from 'src/commons/constants/defaultCategories';
 
 @Injectable()

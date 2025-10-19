@@ -1,4 +1,5 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
+import { DomainException } from 'src/commons/exceptions/domain.exception';
 import { SigninDto } from '../dtos/signin.dto';
 import { UserRepository } from 'src/modules/user/domain/repositories/user.repository';
 import * as bcrypt from 'bcrypt';
@@ -15,7 +16,12 @@ export class SigninUseCase {
     const user = await this.userRepository.findByEmail(signinDto.email);
 
     if (!user) {
-      throw new UnauthorizedException('Invalid credentials');
+      throw new DomainException(
+        SigninUseCase.name,
+        'Invalid credentials',
+        'ERR_INVALID_CREDENTIALS',
+        401,
+      );
     }
 
     const isPasswordValid = await this.validatePassword(
@@ -24,7 +30,12 @@ export class SigninUseCase {
     );
 
     if (!isPasswordValid) {
-      throw new UnauthorizedException('Invalid credentials');
+      throw new DomainException(
+        SigninUseCase.name,
+        'Invalid credentials',
+        'ERR_INVALID_CREDENTIALS',
+        401,
+      );
     }
 
     const accessToken = await this.jwtService.signAsync({
