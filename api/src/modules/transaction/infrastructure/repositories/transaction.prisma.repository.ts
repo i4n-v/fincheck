@@ -1,5 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { TransactionRepository } from '../../domain/repositories/transaction.repository';
+import {
+  IFindAllByUserIdFilters,
+  TransactionRepository,
+} from '../../domain/repositories/transaction.repository';
 import { PrismaService } from 'src/configs/database/prisma/prisma.service';
 import { TransactionEntity } from '../../domain/entities/transaction.entity';
 import { TransactionPrismaMapper } from '../mappers/transaction.prisma.mapper';
@@ -52,10 +55,21 @@ export class TransactionPrismaRepository implements TransactionRepository {
     return TransactionPrismaMapper.toTransactionEntity(transactionModel);
   }
 
-  async findAllByUserId(userId: string) {
+  async findAllByUserId(userId: string, filters: IFindAllByUserIdFilters) {
+    const firstDayOfMonth = new Date(Date.UTC(filters.year, filters.month));
+    const lastDayOfMonth = new Date(Date.UTC(filters.year, filters.month + 1));
+
     const transactionModels = await this.prismService.transactionModel.findMany(
       {
-        where: { userId },
+        where: {
+          userId,
+          bankAccountId: filters.bankAccountId,
+          type: filters.type,
+          date: {
+            gte: firstDayOfMonth.toISOString(),
+            lt: lastDayOfMonth.toISOString(),
+          },
+        },
       },
     );
 

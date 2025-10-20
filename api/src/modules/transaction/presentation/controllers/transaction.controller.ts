@@ -7,6 +7,7 @@ import {
   Body,
   Param,
   ParseUUIDPipe,
+  Query,
 } from '@nestjs/common';
 import { CreateTransactionDto } from '../../application/dtos/create-transaction.dto';
 import { UpdateTransactionDto } from '../../application/dtos/update-transaction.dto';
@@ -16,6 +17,7 @@ import { UpdateTransactionUseCase } from '../../application/use-cases/update-tra
 import { DeleteTransactionUseCase } from '../../application/use-cases/delete-transaction.use-case';
 import { ActiveUserId } from 'src/commons/decorators/active-user-id.decorator';
 import { DomainException } from 'src/commons/exceptions/domain.exception';
+import { FindAllTransactionsQueryDto } from '../../application/dtos/find-all-transactions-query.dto';
 
 @Controller('transactions')
 export class TransactionController {
@@ -45,9 +47,15 @@ export class TransactionController {
   }
 
   @Get()
-  async findAll(@ActiveUserId() userId: string) {
+  async findAll(
+    @ActiveUserId() userId: string,
+    @Query() queryDto: FindAllTransactionsQueryDto,
+  ) {
     try {
-      return await this.findAllTransactionsByUserIdUseCase.execute(userId);
+      return await this.findAllTransactionsByUserIdUseCase.execute(
+        userId,
+        queryDto,
+      );
     } catch (error) {
       if (error instanceof DomainException) {
         throw error.toHttpException();
