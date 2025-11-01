@@ -3,12 +3,13 @@ import { BankAccountRepository } from '../../domain/repositories/bank-account.re
 import { PrismaService } from 'src/configs/database/prisma/prisma.service';
 import { BankAccountEntity } from '../../domain/entities/bank-account.entity';
 import { BankAccountPrismaMapper } from '../mappers/bank-account.prisma.mapper';
+import { ITransactionType } from 'src/modules/transaction/domain/enums/transaction-type.enum';
 
 @Injectable()
 export class BankAccountPrismaRepository implements BankAccountRepository {
   constructor(private readonly prismService: PrismaService) {}
 
-  async create(bankAccount: BankAccountEntity) {
+  async create(bankAccount: Omit<BankAccountEntity, 'transactions'>) {
     const bankAccountModel = await this.prismService.bankAccountModel.create({
       data: bankAccount,
     });
@@ -18,7 +19,7 @@ export class BankAccountPrismaRepository implements BankAccountRepository {
 
   async updateById(
     bankAccountId: string,
-    updateData: Partial<BankAccountEntity>,
+    updateData: Partial<Omit<BankAccountEntity, 'transactions'>>,
   ) {
     const bankAccountModel = await this.prismService.bankAccountModel.update({
       where: {
@@ -56,9 +57,35 @@ export class BankAccountPrismaRepository implements BankAccountRepository {
     const bankAccountModels = await this.prismService.bankAccountModel.findMany(
       {
         where: { userId },
+        include: {
+          transactions: true,
+        },
       },
     );
 
-    return bankAccountModels.map(BankAccountPrismaMapper.toBankAccountEntity);
+    const banckAccounts = bankAccountModels.map((bankAccountModel) => {
+      const { transactions, ...bankAccount } =
+        BankAccountPrismaMapper.toBankAccountEntityWithTransactions(
+          bankAccountModel,
+        );
+
+      const totalTransactions = transactions!.reduce(
+        (currentBalance, transaction) => {
+          if (transaction.type === ITransactionType.INCOME) {
+            return currentBalance + transaction.value;
+          }
+
+          return currentBalance - transaction.value;
+        },
+        0,
+      );
+
+      return {
+        ...bankAccount,
+        currentBalance: totalTransactions + bankAccount.initialBalance,
+      };
+    });
+
+    return banckAccounts;
   }
 }

@@ -1,6 +1,7 @@
 import { DomainException } from 'src/commons/exceptions/domain.exception';
 import { v4 } from 'uuid';
 import { IBankAccountType } from '../enums/bank-account-type.enum';
+import { TransactionEntity } from 'src/modules/transaction/domain/entities/transaction.entity';
 
 export class BankAccountEntity {
   id: string;
@@ -9,6 +10,7 @@ export class BankAccountEntity {
   color: string;
   initialBalance: number;
   userId: string;
+  transactions?: TransactionEntity[];
 
   constructor(
     name: string,
@@ -17,6 +19,7 @@ export class BankAccountEntity {
     initialBalance: number,
     userId: string,
     id?: string,
+    transactions?: TransactionEntity[],
   ) {
     this.id = id || v4();
 
@@ -65,5 +68,9 @@ export class BankAccountEntity {
     this.color = color;
     this.initialBalance = initialBalance;
     this.userId = userId;
+
+    if (transactions) {
+      this.transactions = transactions;
+    }
   }
 }
